@@ -44,7 +44,20 @@ def edit
     @story = @iteration.story.find(params[:story_id])
     @task = @story.tasks.find(params[:id])
 end
-
+def completetask
+	@task_id = Task.find(params[:id])
+    @task_id.story_id #story id
+    @storyid = Story.find(:all, :conditions => {:id => @task_id.story_id })
+    @storyid.each do |iterationid|
+		@itid = iterationid.iteration_id#iteration id
+    end
+    @pid = Iteration.find(:all, :conditions => {:id => @itid })
+    @pid.each do |projectid|
+    @proejctid = projectid.project_id #project id
+    end
+	@task_id.update_attributes(:status => "1")
+	redirect_to  project_iteration_story_tasks_path( @proejctid , @itid , @task_id.story_id , @task_id.id)
+end
 def update
     @project = Project.find(params[:project_id])
     @iteration = @project.iteration.find(params[:iteration_id])

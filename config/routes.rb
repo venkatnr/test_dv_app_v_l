@@ -17,6 +17,9 @@
 
 RedmineApp::Application.routes.draw do
 	  resources :tasks do
+			member do
+				post 'completetask'
+			end
 			resources :logs do
 			   
 				get 'send_mails'
@@ -124,6 +127,7 @@ RedmineApp::Application.routes.draw do
 		  resources :tasks do
 	 	    collection do 
 			get 'total_tasks'
+			
 			
 			end
 		  end 

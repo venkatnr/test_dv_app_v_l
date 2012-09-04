@@ -63,18 +63,6 @@ ActiveRecord::Schema.define(:version => 20120904030552) do
   add_index "boards", ["last_message_id"], :name => "index_boards_on_last_message_id"
   add_index "boards", ["project_id"], :name => "boards_project_id"
 
-  create_table "burndown_days", :force => true do |t|
-    t.integer  "points_committed", :default => 0,   :null => false
-    t.integer  "points_accepted",  :default => 0,   :null => false
-    t.integer  "points_resolved",  :default => 0,   :null => false
-    t.float    "remaining_hours",  :default => 0.0, :null => false
-    t.integer  "version_id",                        :null => false
-    t.datetime "created_at",                        :null => false
-    t.datetime "updated_at",                        :null => false
-  end
-
-  add_index "burndown_days", ["version_id"], :name => "index_burndown_days_on_version_id"
-
   create_table "changes", :force => true do |t|
     t.integer "changeset_id",                               :null => false
     t.string  "action",        :limit => 1, :default => "", :null => false
@@ -270,9 +258,6 @@ ActiveRecord::Schema.define(:version => 20120904030552) do
     t.integer  "lft"
     t.integer  "rgt"
     t.boolean  "is_private",       :default => false, :null => false
-    t.integer  "position",                            :null => false
-    t.float    "remaining_hours"
-    t.float    "story_points"
   end
 
   add_index "issues", ["assigned_to_id"], :name => "index_issues_on_assigned_to_id"
@@ -280,7 +265,6 @@ ActiveRecord::Schema.define(:version => 20120904030552) do
   add_index "issues", ["category_id"], :name => "index_issues_on_category_id"
   add_index "issues", ["created_on"], :name => "index_issues_on_created_on"
   add_index "issues", ["fixed_version_id"], :name => "index_issues_on_fixed_version_id"
-  add_index "issues", ["position"], :name => "index_issues_on_position"
   add_index "issues", ["priority_id"], :name => "index_issues_on_priority_id"
   add_index "issues", ["project_id"], :name => "issues_project_id"
   add_index "issues", ["root_id", "lft", "rgt"], :name => "index_issues_on_root_id_and_lft_and_rgt"
@@ -324,28 +308,6 @@ ActiveRecord::Schema.define(:version => 20120904030552) do
   add_index "journals", ["journalized_id"], :name => "index_journals_on_journalized_id"
   add_index "journals", ["user_id"], :name => "index_journals_on_user_id"
 
-  create_table "kb_articles", :force => true do |t|
-    t.integer  "category_id",                   :null => false
-    t.string   "title",                         :null => false
-    t.text     "summary"
-    t.text     "content"
-    t.datetime "created_at",                    :null => false
-    t.datetime "updated_at",                    :null => false
-    t.integer  "author_id",      :default => 0, :null => false
-    t.integer  "comments_count"
-    t.integer  "project_id",     :default => 0
-  end
-
-  create_table "kb_categories", :force => true do |t|
-    t.string   "title",       :null => false
-    t.text     "description"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
-    t.integer  "parent_id"
-    t.integer  "lft"
-    t.integer  "rgt"
-  end
-
   create_table "logs", :force => true do |t|
     t.date     "report_date"
     t.float    "spent_hours"
@@ -361,20 +323,6 @@ ActiveRecord::Schema.define(:version => 20120904030552) do
   end
 
   add_index "logs", ["task_id"], :name => "index_logs_on_task_id"
-
-  create_table "logtimes", :force => true do |t|
-    t.date     "report_date"
-    t.float    "spent_hours"
-    t.string   "user1"
-    t.string   "user2"
-    t.float    "remaining_time"
-    t.float    "estimated_time"
-    t.integer  "task_id"
-    t.datetime "created_at",     :null => false
-    t.datetime "updated_at",     :null => false
-  end
-
-  add_index "logtimes", ["task_id"], :name => "index_logtimes_on_task_id"
 
   create_table "member_roles", :force => true do |t|
     t.integer "member_id",      :null => false
@@ -415,12 +363,6 @@ ActiveRecord::Schema.define(:version => 20120904030552) do
   add_index "messages", ["created_on"], :name => "index_messages_on_created_on"
   add_index "messages", ["last_reply_id"], :name => "index_messages_on_last_reply_id"
   add_index "messages", ["parent_id"], :name => "messages_parent_id"
-
-  create_table "myprojects", :force => true do |t|
-    t.string "name"
-    t.date   "start_date"
-    t.date   "end_date"
-  end
 
   create_table "news", :force => true do |t|
     t.integer  "project_id"
@@ -464,8 +406,8 @@ ActiveRecord::Schema.define(:version => 20120904030552) do
     t.integer  "lft"
     t.integer  "rgt"
     t.float    "estimation_time"
-    t.string   "type"
     t.string   "typeofproject"
+    t.string   "type"
   end
 
   add_index "projects", ["lft"], :name => "index_projects_on_lft"
@@ -492,45 +434,6 @@ ActiveRecord::Schema.define(:version => 20120904030552) do
 
   add_index "queries", ["project_id"], :name => "index_queries_on_project_id"
   add_index "queries", ["user_id"], :name => "index_queries_on_user_id"
-
-  create_table "ratings", :force => true do |t|
-    t.integer "rated_id"
-    t.string  "rated_type"
-    t.decimal "rating",     :precision => 10, :scale => 0
-  end
-
-  add_index "ratings", ["rated_type", "rated_id"], :name => "index_ratings_on_rated_type_and_rated_id"
-
-  create_table "rb_journals", :force => true do |t|
-    t.integer  "issue_id",                :null => false
-    t.string   "property",  :limit => 50, :null => false
-    t.datetime "timestamp",               :null => false
-    t.string   "value",     :limit => 50
-  end
-
-  add_index "rb_journals", ["issue_id", "property", "value"], :name => "index_rb_journals_on_issue_id_and_property_and_value"
-  add_index "rb_journals", ["issue_id"], :name => "index_rb_journals_on_issue_id"
-  add_index "rb_journals", ["property"], :name => "index_rb_journals_on_property"
-  add_index "rb_journals", ["timestamp"], :name => "index_rb_journals_on_timestamp"
-  add_index "rb_journals", ["value"], :name => "index_rb_journals_on_value"
-
-  create_table "release_burndown_days", :force => true do |t|
-    t.integer  "release_id",             :null => false
-    t.date     "day",                    :null => false
-    t.integer  "remaining_story_points", :null => false
-    t.datetime "created_at",             :null => false
-    t.datetime "updated_at",             :null => false
-  end
-
-  create_table "releases", :force => true do |t|
-    t.string   "name",                 :null => false
-    t.date     "release_start_date",   :null => false
-    t.date     "release_end_date",     :null => false
-    t.integer  "initial_story_points"
-    t.integer  "project_id",           :null => false
-    t.datetime "created_at",           :null => false
-    t.datetime "updated_at",           :null => false
-  end
 
   create_table "repositories", :force => true do |t|
     t.integer "project_id",                  :default => 0,     :null => false
@@ -565,18 +468,6 @@ ActiveRecord::Schema.define(:version => 20120904030552) do
 
   add_index "settings", ["name"], :name => "index_settings_on_name"
 
-  create_table "sprints", :force => true do |t|
-    t.string   "iteration"
-    t.text     "decsription"
-    t.date     "start_date"
-    t.date     "end_date"
-    t.integer  "project_id"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
-  end
-
-  add_index "sprints", ["project_id"], :name => "index_sprints_on_project_id"
-
   create_table "stories", :force => true do |t|
     t.string   "name"
     t.text     "description"
@@ -594,23 +485,6 @@ ActiveRecord::Schema.define(:version => 20120904030552) do
 
   add_index "stories", ["iteration_id"], :name => "index_stories_on_iteration_id"
 
-  create_table "taggings", :force => true do |t|
-    t.integer  "tag_id"
-    t.integer  "taggable_id"
-    t.string   "taggable_type"
-    t.datetime "created_at"
-    t.integer  "tagger_id"
-    t.string   "tagger_type"
-    t.string   "context",       :limit => 128
-  end
-
-  add_index "taggings", ["tag_id"], :name => "index_taggings_on_tag_id"
-  add_index "taggings", ["taggable_id", "taggable_type", "context"], :name => "index_taggings_on_taggable_id_and_taggable_type_and_context"
-
-  create_table "tags", :force => true do |t|
-    t.string "name"
-  end
-
   create_table "tasks", :force => true do |t|
     t.string   "name"
     t.string   "task_type"
@@ -621,7 +495,7 @@ ActiveRecord::Schema.define(:version => 20120904030552) do
     t.integer  "story_id"
     t.datetime "created_at",                                :null => false
     t.datetime "updated_at",                                :null => false
-    t.date     "last_mail",       :default => '2012-08-24'
+    t.date     "last_mail",       :default => '2012-08-31'
     t.boolean  "status"
   end
 
@@ -684,20 +558,6 @@ ActiveRecord::Schema.define(:version => 20120904030552) do
 
   add_index "user_preferences", ["user_id"], :name => "index_user_preferences_on_user_id"
 
-  create_table "user_tasks", :force => true do |t|
-    t.string   "name"
-    t.string   "type"
-    t.string   "disposition"
-    t.string   "acceptor"
-    t.float    "estimated_hours"
-    t.text     "description"
-    t.integer  "story_id"
-    t.datetime "created_at",      :null => false
-    t.datetime "updated_at",      :null => false
-  end
-
-  add_index "user_tasks", ["story_id"], :name => "index_user_tasks_on_story_id"
-
   create_table "users", :force => true do |t|
     t.string   "login",                           :default => "",    :null => false
     t.string   "hashed_password",   :limit => 40, :default => "",    :null => false
@@ -755,31 +615,19 @@ ActiveRecord::Schema.define(:version => 20120904030552) do
   add_index "userstroys", ["iteration_id"], :name => "index_userstroys_on_iteration_id"
 
   create_table "versions", :force => true do |t|
-    t.integer  "project_id",        :default => 0,      :null => false
-    t.string   "name",              :default => "",     :null => false
-    t.string   "description",       :default => ""
+    t.integer  "project_id",      :default => 0,      :null => false
+    t.string   "name",            :default => "",     :null => false
+    t.string   "description",     :default => ""
     t.date     "effective_date"
     t.datetime "created_on"
     t.datetime "updated_on"
     t.string   "wiki_page_title"
-    t.string   "status",            :default => "open"
-    t.string   "sharing",           :default => "none", :null => false
-    t.date     "sprint_start_date"
+    t.string   "status",          :default => "open"
+    t.string   "sharing",         :default => "none", :null => false
   end
 
   add_index "versions", ["project_id"], :name => "versions_project_id"
   add_index "versions", ["sharing"], :name => "index_versions_on_sharing"
-
-  create_table "viewings", :force => true do |t|
-    t.integer  "viewer_id"
-    t.integer  "viewed_id"
-    t.string   "viewed_type"
-    t.string   "ip",          :limit => 24
-    t.datetime "created_at"
-  end
-
-  add_index "viewings", ["viewed_type", "viewed_id"], :name => "index_viewings_on_viewed_type_and_viewed_id"
-  add_index "viewings", ["viewer_id"], :name => "index_viewings_on_viewer_id"
 
   create_table "watchers", :force => true do |t|
     t.string  "watchable_type", :default => "", :null => false
