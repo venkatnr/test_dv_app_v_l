@@ -233,7 +233,14 @@ end
 
 def timesheet
 @user = User.current.lastname 
-raise @user.inspect
+
+end
+
+def mytimesheet
+@start = params[:start_date]
+@end = params[:end_date]
+@user = params[:user]
+
 end
 
 end

@@ -1,0 +1,41 @@
+<html>
+From <%= @start %> to <%= @end %> for 
+<%= @user %><br/>
+<% @actual_time = 0 %>
+<table width =100% >
+	<tr width =100%>
+		<th width =25%> Date </th>
+		<th width =25%> Task </th>
+		<th width =25%> Spent hours </th>
+		<th width =25%> Description </th>
+	</tr>
+
+	<% @tasks = Task.find(:all, :conditions => {:acceptor => @user}) %>
+		<% @tasks.each do |task| %>
+		<% if task.logs.each do |log| %>
+                   <% if log.report_date > @start.to_date && log.report_date < @end.to_date %>
+			<tr width =100%>
+			<td width =25% align="center">
+			<%= log.report_date %>
+			</td>
+			<td width =25% align="center">
+			<%= task.name %>
+			</td>
+			<td width =25% align="center">
+			<%= log.spent_hours %>
+			<% @actual_time = @actual_time.to_f + log.spent_hours.to_f %>
+			</td>
+			<td width =25% align="center">
+			<%= log.description %>
+			</td>
+			</tr>
+		      <% end %>
+		<% end %>
+	<% end %>
+<%#= task.name %><br/>
+<% end %>
+</table>
+<hr/>
+<B> Total Actual Hours </b> : <%= @actual_time  %>
+<p id="pdf_link"><%= link_to "Download Invoice (PDF)",  my_mytimesheet_path(:format => "pdf") %></p>
+</html>
