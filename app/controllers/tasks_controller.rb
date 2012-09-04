@@ -32,10 +32,9 @@ def create
         end 
 	if @task.save
 		@tid = @task.id
-          
 	   TaskMailer.task_creation(@usermail,@iname,@tid).deliver
 	end
-    render :action => "show"
+       #render :action => "show"
 end
 
 def edit
@@ -84,7 +83,6 @@ def update
 
 end
 
-
 def show
   @project = Project.find(params[:project_id])
   @iteration = Iteration.find(params[:iteration_id])
@@ -92,6 +90,7 @@ def show
  @task = @story.tasks.find(params[:id])
 
 end
+
 
 def delete
    raise "demo".inspect
@@ -105,6 +104,12 @@ end
 def total_tasks
 	
 	
+end
+def show
+ @pro = Project.find(params[:project_id])
+ @iteration = Iteration.find(params[:iteration_id]) 
+ @story = Story.find(params[:story_id])
+ @task = Task.find(params[:id]) 
 end
 def update_tasks
 	
