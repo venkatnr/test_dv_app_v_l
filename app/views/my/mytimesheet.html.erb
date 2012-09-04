@@ -1,4 +1,8 @@
 <html>
+<% @start = params[:start_date] %>
+<% @end = params[:end_date] %>
+<% @user = params[:user] %>
+
 From <%= @start %> to <%= @end %> for 
 <%= @user %><br/>
 <% @actual_time = 0 %>
