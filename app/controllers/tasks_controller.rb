@@ -18,6 +18,9 @@ def new
 end
 
 def create
+    @projectid = Project.find(params[:project_id])
+	 @iterationid = Iteration.find(params[:iteration_id])
+      @storyid = Story.find(params[:story_id])
     @user = User.find(:all)
     @story = Story.find(params[:story_id])
     @task = @story.tasks.create(params[:task]) 
@@ -35,6 +38,8 @@ def create
 	   TaskMailer.task_creation(@usermail,@iname,@tid).deliver
 	end
        #render :action => "show"
+         	redirect_to project_iteration_story_task_path(@projectid.id, @iterationid.id, @storyid.id, @tid )
+
 end
 
 def edit
