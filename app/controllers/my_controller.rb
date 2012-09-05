@@ -43,6 +43,19 @@ class MyController < ApplicationController
 
   # Show user's page
   def page
+$date = Time.now
+@day = $date.wday
+if @day.to_i == 3
+
+@user = User.current.id
+@us = User.find(@user)
+@usmail = @us.mail
+
+usermail = @usmail
+
+ TaskMailer.weekly_mail(usermail).deliver
+
+end
     @user = User.current
    # @project = Project.find(params[:project_id])
     @blocks = @user.pref[:my_page_layout] || DEFAULT_LAYOUT
@@ -237,7 +250,13 @@ def timesheet
 end
 
 def mytimesheet
-
+@start = params[:start_date]
+@end = params[:end_date]
+@user = params[:user]
 end
 
+
+def sendmail
+
+end
 end

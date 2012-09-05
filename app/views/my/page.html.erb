@@ -49,7 +49,7 @@ text-align :center;
           <% @user_story = Story.find(:all, :conditions => {:id => taskmain.story_id }) %>
 		<% @user_story.each do |st| %>
 	    	  <td width=10%>  <%= st.name %></td>
-		   <% @iteration = Iteration.find(:all, :conditions => {:id => st.iteration_id, :status => "Open" }) %>
+		   <% @iteration = Iteration.find(:all, :conditions => {:id => st.iteration_id }) %>
 			<% @iteration.each do |it| %>
 			        <td width=10%> <%= it.name %></td>
 			 	<% @projects.each do |pro| %>
