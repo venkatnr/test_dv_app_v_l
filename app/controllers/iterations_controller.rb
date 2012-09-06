@@ -1,5 +1,5 @@
 class IterationsController < ApplicationController
-before_filter :test, :except => [:index, :new, :edit]
+before_filter :test, :except => [:index, :new, :edit, :create]
 
 def test
 		@project = Project.find(params[:project_id])
@@ -33,8 +33,14 @@ end
 
 def create
     @project = Project.find(params[:project_id])
-    @iteration = @project.iteration.create(params[:iteration])
-    redirect_to project_iteration_path(@project.id, @iteration.id )
+    @all_iterations = Iteration.find(:all, :select => "status" ,:conditions => {:status => "Open"}).map(&:status).count
+	if @all_iterations.to_i >= 1
+		flash[:error] = "One record is already opened."
+		render :action => "new"
+	else  
+		@iteration = @project.iteration.create(params[:iteration])
+		redirect_to project_iteration_path(@project.id, @iteration.id )
+    end
 end
 
 def update
