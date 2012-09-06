@@ -33,9 +33,9 @@ end
 
 def create
     @project = Project.find(params[:project_id])
-    @all_iterations = Iteration.find(:all, :select => "status" ,:conditions => {:status => "Open"}).map(&:status).count
+    @all_iterations = Iteration.find(:all, :select => "status" ,:conditions => {:status => "Open", :project_id => @project.id}).map(&:status).count
 	if @all_iterations.to_i >= 1
-		flash[:error] = "One record is already opened."
+		flash[:error] = "One record is already \"Opened\""
 		render :action => "new"
 	else  
 		@iteration = @project.iteration.create(params[:iteration])
