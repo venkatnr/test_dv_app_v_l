@@ -4,7 +4,7 @@
 
 production:
   adapter: mysql
-  database: vispertool
+  database: redmine
   host: localhost
   username: root
   password: tiger
