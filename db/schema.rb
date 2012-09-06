@@ -406,8 +406,8 @@ ActiveRecord::Schema.define(:version => 20120905071836) do
     t.integer  "lft"
     t.integer  "rgt"
     t.float    "estimation_time"
-    t.string   "type"
     t.string   "typeofproject"
+    t.string   "type"
   end
 
   add_index "projects", ["lft"], :name => "index_projects_on_lft"
@@ -505,7 +505,7 @@ ActiveRecord::Schema.define(:version => 20120905071836) do
     t.integer  "story_id"
     t.datetime "created_at",                                :null => false
     t.datetime "updated_at",                                :null => false
-    t.date     "last_mail",       :default => '2012-09-05'
+    t.date     "last_mail",       :default => '2012-08-31'
     t.boolean  "status"
   end
 
