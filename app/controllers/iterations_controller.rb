@@ -34,13 +34,52 @@ end
 def create
     @project = Project.find(params[:project_id])
     @all_iterations = Iteration.find(:all, :select => "status" ,:conditions => {:status => "Open", :project_id => @project.id}).map(&:status).count
-	if @all_iterations.to_i >= 1
+    @iteration = @project.iteration.new(params[:iteration])
+	
+	if @iteration.status == "Open"
+	    if @all_iterations.to_i >= 1
 		flash[:error] = "One record is already \"Opened\""
 		render :action => "new"
-	else  
-		@iteration = @project.iteration.create(params[:iteration])
-		redirect_to project_iteration_path(@project.id, @iteration.id )
-    end
+            end
+	elsif 
+		case @iteration.iterationtype
+
+		when "Weekly"
+		@days = @iteration.end_date - @iteration.start_date
+			if @days.to_i == 7
+	  			@iteration.save
+				redirect_to project_iteration_path(@project.id, @iteration.id )
+				flash[:notice] = "Successfully created"
+			else
+				flash[:error] = "more days than a  week"
+			        render :action => "new"
+			end
+		when  "BIO-Monthly"
+		@days = @iteration.end_date - @iteration.start_date
+			if @days.to_i == 15
+	  			@iteration.save
+				redirect_to project_iteration_path(@project.id, @iteration.id )
+			else
+				flash[:error] =  "more days than a  15 days"
+				render :action => "new"
+			end
+		when "Monthly"
+		@days = @iteration.end_date - @iteration.start_date
+			if @days.to_i == 30
+	  			@iteration.save
+				redirect_to project_iteration_path(@project.id, @iteration.id )
+			else
+				flash[:error] =  "more days than a  month"
+				render :action => "new"
+			end
+		else 
+		raise "move a head".inspect
+		
+	end
+		#@iteration.save
+		#redirect_to project_iteration_path(@project.id, @iteration.id )
+      end
+
 end
 
 def update
