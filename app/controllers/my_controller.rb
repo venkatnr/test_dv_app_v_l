@@ -45,16 +45,11 @@ class MyController < ApplicationController
   def page
 $date = Time.now
 @day = $date.wday
-if @day.to_i == 3
-
-@user = User.current.id
-@us = User.find(@user)
-@usmail = @us.mail
-
-usermail = @usmail
-
- TaskMailer.weekly_mail(usermail).deliver
-
+if @day.to_i == 4
+	@user = User.current.id
+	@us = User.find(@user) 
+	usermail = @us
+	TaskMailer.weekly_mail(usermail).deliver
 end
     @user = User.current
    # @project = Project.find(params[:project_id])

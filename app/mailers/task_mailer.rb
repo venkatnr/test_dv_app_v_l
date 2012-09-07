@@ -19,9 +19,16 @@ def task_update(usermail,tid,week)
     mail(:to =>@task_acceptor.mail, :subject => "Task", :from => "redmine.logicmatter@gmail.com")
   end  
 def weekly_mail(usermail)
-@task_acceptor = usermail
+@task_acceptor = usermail.mail
 
    mail(:to => @task_acceptor, :subject => "Task", :from => "redmine.logicmatter@gmail.com")
 end
-
+def checkmail
+ mail(:to =>"sriram.in20@gmail.com", :subject => "Task", :from => "redmine.logicmatter@gmail.com")
 end
+end
+
+
+
+@sendmail = TaskMailer.new
+@sendmail.checkmail
