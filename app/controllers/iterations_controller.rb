@@ -6,7 +6,7 @@ def test
 		
 		@iteration = @project.iteration.find(params[:id])
 		
-		@endtime =  @iteration.end_date-Time.now.to_date
+		@endtime =  @iteration.end_date - Time.now.to_date
 		if @endtime.to_i == -1
 			@iteration.update_attributes(:status => "Closed")
 			project_iterations_path(@project.id)
@@ -32,54 +32,58 @@ def edit
 end
 
 def create
-    @project = Project.find(params[:project_id])
+  @project = Project.find(params[:project_id])
     @all_iterations = Iteration.find(:all, :select => "status" ,:conditions => {:status => "Open", :project_id => @project.id}).map(&:status).count
-    @iteration = @project.iteration.new(params[:iteration])
-	
+   if  @iteration = @project.iteration.new(params[:iteration])
+     @flag = 0
 	if @iteration.status == "Open"
-	    if @all_iterations.to_i >= 1
-		flash[:error] = "One record is already \"Opened\""
-		render :action => "new"
-            end
-	elsif 
-		case @iteration.iterationtype
+		if @all_iterations.to_i >= 1
+			flash[:error] = "One record is already \"Opened\""
+			render :action => "new" and return
+		 end
+	
+	else
+		@current_iteration_start = @iteration.start_date
+			@all_iterations_enddate = Iteration.find(:all, :select => "end_date" ,:conditions => {:project_id => @project.id}).map(&:end_date)
+			@all_iterations_enddate.each do |enddate|
+							if @current_iteration_start < enddate 
+							@flag = @flag + 1
+							end
+						    end
+							if @flag > 0 
+							flash[:error] = "One of the iteration having the dates you selected select different one"
+							end
+	end
+	
+	case @iteration.iterationtype
 
 		when "Weekly"
-		@days = @iteration.end_date - @iteration.start_date
-			if @days.to_i == 7
-	  			@iteration.save
-				redirect_to project_iteration_path(@project.id, @iteration.id )
-				flash[:notice] = "Successfully created"
-			else
-				flash[:error] = "more days than a  week"
-			        render :action => "new"
+			#raise (@iteration.end_date - @iteration.start_date).to_i.inspect
+			 if (@iteration.end_date - @iteration.start_date).to_i != 7
+			  flash[:error] = "Less or more days selected for weekly type"
+			else 
+			  @iteration.save
+			redirect_to project_iteration_path(@project.id, @iteration.id ) and return
 			end
+				
 		when  "BIO-Monthly"
-		@days = @iteration.end_date - @iteration.start_date
-			if @days.to_i == 15
-	  			@iteration.save
-				redirect_to project_iteration_path(@project.id, @iteration.id )
-			else
-				flash[:error] =  "more days than a  15 days"
-				render :action => "new"
+		   	if (@iteration.end_date - @iteration.start_date).to_i != 15
+			  flash[:error] = "Less or more days selected for Bio-Monthly type"
+			else 
+			  @iteration.save
+			redirect_to project_iteration_path(@project.id, @iteration.id ) and return
 			end
 		when "Monthly"
-		@days = @iteration.end_date - @iteration.start_date
-			if @days.to_i == 30
-	  			@iteration.save
-				redirect_to project_iteration_path(@project.id, @iteration.id )
-			else
-				flash[:error] =  "more days than a  month"
-				render :action => "new"
+		   	if (@iteration.end_date - @iteration.start_date).to_i != 30 ||  if (@iteration.end_date - @iteration.start_date).to_i != 31
+			  flash[:error] = "Less or more days selected for Monthly type"
+			else 
+			  @iteration.save
+			redirect_to project_iteration_path(@project.id, @iteration.id ) and return
 			end
-		else 
-		raise "move a head".inspect
 		
+		end
 	end
-		#@iteration.save
-		#redirect_to project_iteration_path(@project.id, @iteration.id )
-      end
-
+  render :nothing => true
 end
 
 def update
