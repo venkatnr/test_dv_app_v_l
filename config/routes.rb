@@ -30,6 +30,11 @@ RedmineApp::Application.routes.draw do
 
   resources :timereports
 
+  resources :backlogs do
+	resources :tasks
+	
+   end 
+
   root :to => 'myprojects#index', :as => 'home'
   resources :myprojects
   match 'login', :to => 'account#login', :as => 'signin'
