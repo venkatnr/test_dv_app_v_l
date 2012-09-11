@@ -30,7 +30,10 @@ RedmineApp::Application.routes.draw do
 
   resources :timereports
 
-  resources :backlogs do
+   resources :backlogs do
+	collection do
+		post 'assign'
+	end
 	resources :tasks
 	
    end 

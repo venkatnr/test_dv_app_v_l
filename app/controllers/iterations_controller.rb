@@ -89,6 +89,7 @@ end
 def update
    @project = Project.find(params[:project_id])
    @iteration = @project.iteration.find(params[:id])
+	#raise @iteration.name.inspect
    if @iteration.update_attributes(params[:iteration])
        render :action => "show"
    else

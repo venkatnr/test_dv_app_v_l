@@ -8,7 +8,6 @@ class CreateTasks < ActiveRecord::Migration
       t.float :estimated_hours
       t.text :description
       t.references :story
-      t.references :backlogs
 
       t.timestamps
     end
