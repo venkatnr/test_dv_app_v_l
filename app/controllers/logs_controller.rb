@@ -121,6 +121,7 @@ raise "yes".inspect
 end
 
 def update_tasks
+raise params[:spent_hours].inspect
 	@log = params[:spent_hours]
 	@date = params[:reported_date]
 	@current_task = params[:task_id]
@@ -129,8 +130,9 @@ def update_tasks
         @remaining_time = @task.estimated_hours.to_i - @log.to_i
 	@user = User.current.lastname
         #@log_exist = Log.find(:all , :conditions => {:task_id => @current_task})
-	@log = @task.logs.create(:spent_hours => @log,:report_date => @date.to_date,:user1 => @user, :task_id=>@current_task,:remaining_time => @remaining_time,:description => @description)
+	@log = @task.logs.create(:spent_hours => @log,:report_date => @date,:user1 => @user, :task_id=>@current_task,:remaining_time => @remaining_time,:description => @description)
 	redirect_to    my_page_path
 end
+
 
 end

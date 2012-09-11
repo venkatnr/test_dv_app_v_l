@@ -30,5 +30,4 @@ end
 
 
 
-@sendmail = TaskMailer.new
-@sendmail.checkmail
+##@sendmail.checkmail

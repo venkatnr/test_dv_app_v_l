@@ -24,6 +24,7 @@ RedmineApp::Application.routes.draw do
 			   
 				get 'send_mails'
 				post 'update_tasks', :on => :member
+				
 			    
 			end
 		  end 
@@ -103,6 +104,7 @@ RedmineApp::Application.routes.draw do
   match 'my/timesheet', :controller => 'my', :action => 'timesheet', :via => [:get, :post]
   match 'my/mytimesheet', :controller => 'my', :action => 'mytimesheet', :via => [:get, :post]
   match 'my/sendmail', :controller => 'my', :action => 'sendmail', :via => [:get, :post]
+  match 'my/weeklog', :controller => 'my', :action => 'weeklog', :via => [:get, :post]
   resources :users
   match 'users/:id/memberships/:membership_id', :to => 'users#edit_membership', :via => :put, :as => 'user_membership'
   match 'users/:id/memberships/:membership_id', :to => 'users#destroy_membership', :via => :delete
