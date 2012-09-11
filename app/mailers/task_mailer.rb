@@ -24,11 +24,11 @@ def weekly_mail(usermail)
    mail(:to => @task_acceptor, :subject => "Task", :from => "redmine.logicmatter@gmail.com")
 end
 def checkmail
- mail(:to =>"sriram.in20@gmail.com", :subject => "Task", :from => "redmine.logicmatter@gmail.com")
+  mail(:to =>"sriram.in20@gmail.com", :subject => "Task", :from => "redmine.logicmatter@gmail.com")
 end
 end
 
 
 
-@sendmail = TaskMailer.new
-@sendmail.checkmail
+#@sendmail = TaskMailer.new
+#@sendmail.checkmail
