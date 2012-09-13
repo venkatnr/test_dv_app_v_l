@@ -3,7 +3,12 @@ RedmineApp::Application.configure do
   # The production environment is meant for finished, "live" apps.
   # Code is not reloaded between requests
   config.cache_classes = false
-
+  config.assets.compress = true
+  # Don't fallback to assets pipeline if a precompiled asset is missed
+  config.assets.compile = true
+  # Generate digests for assets URLs
+  config.assets.digest = true
+  
   #####
   # Customize the default logger (http://ruby-doc.org/core/classes/Logger.html)
   #
