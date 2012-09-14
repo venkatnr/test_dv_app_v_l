@@ -252,7 +252,7 @@ def mytimesheet
 end
 
 
-def sendmail
-
+def weeklog
+raise "yes".inspect
 end
 end
