@@ -121,14 +121,14 @@ def update_tasks
 	raise "yes".inspect
 end
 def logs
-raise  params[:log_date].inspect
-raise @log_date.inspect
+
+#raise @log_date.inspect
 	 params[:spent_hours].each do |t,values|
 		@task = Task.find(t)
 		@values = values 
 		@spent = @values.values[0]
 		@desc = @values.values[1]
-		@date = @values.values[2]
+		@date = params["gettingdate"]
 		
 			if @spent != "" 
 
