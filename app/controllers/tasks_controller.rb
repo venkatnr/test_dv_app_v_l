@@ -120,4 +120,20 @@ def update_tasks
 	
 	raise "yes".inspect
 end
+def logs
+raise  params[:log_date].inspect
+raise @log_date.inspect
+	 params[:spent_hours].each do |t,values|
+		@task = Task.find(t)
+		@values = values 
+		@spent = @values.values[0]
+		@desc = @values.values[1]
+		@date = @values.values[2]
+		
+			if @spent != "" 
+
+				@log = @task.logs.create(:spent_hours => @spent , :description => @desc, :report_date => @date )
+			end
+	 end
+end
 end

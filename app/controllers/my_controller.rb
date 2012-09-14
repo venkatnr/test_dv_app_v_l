@@ -250,7 +250,10 @@ def mytimesheet
 @user = params[:user]
 #
 end
-
+def logs
+ params[:spent_hours].each do |t,values|
+end
+end
 
 def weeklog
 raise "yes".inspect
