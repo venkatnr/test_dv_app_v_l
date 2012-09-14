@@ -1,12 +1,15 @@
+<%= stylesheet_link_tag( 'default')%>
+<%= javascript_include_tag('jquery.min', 'glDatePicker.min')%>
 <html>
+
 <head>
 <script>
 function date()
 {
-var date = document.getElementById("date").value
-document.getElementById("date1").value = date
-var date1 = document.getElementById("date1").value
-alert(date1);
+	var date = document.getElementById("date").value
+	document.getElementById("date1").value = date
+	var date1 = document.getElementById("date1").value
+	alert(date1);
 }
 </script>
 <style>
@@ -32,11 +35,34 @@ text-align :center;
 <tr width=100%>
 <th width=10%>Project name </th>
 <th  width=10%>Task name</th>
-<th width=10%>Iteration name</th>
-<th width=10%>Story name</th>
+
 <th width=10%>Estimated time</th>
 <th width=10%>Actual time</th>
-<th id="date" width=15%><% @date =Time.now.to_date %> <%= @date %></th>
+<th id="date" width=15%>
+<%= text_field_tag 'gettingdate',nil, :onchange=> "myFunction();" %>
+<script>
+	$("#gettingdate").glDatePicker(
+	{
+		onChange: function(target, newDate)
+		{
+			target.val
+			(
+				newDate.getFullYear() + "-" +
+				(newDate.getMonth() + 1) + "-" +
+				newDate.getDate()
+			);
+		}
+	});</script><script>
+	function myFunction()
+			{
+				 var first =  $("#gettingdate").val();
+				 document.getElementById("log_date").value = first
+				 var second = document.getElementById("log_date").value
+				 alert(second);
+			}
+</script>
+</th>
+
 </tr>
 <%= form_tag( logs_tasks_path, :method => :post) do %>
 <%@tid.each do |taskmain|%>
@@ -55,8 +81,7 @@ text-align :center;
 					<% if pro.id == it.project_id %>
 					  <td width=10%><%= pro.name %></td>
 					   <td width=10%> <%=taskmain.name%></td>
-					   <td width=10%> <%= it.name %></td>
-					   <td width=10%> <%= st.name %></td>
+					  
 						<td width=10%><%= taskmain.estimated_hours.round(2) rescue 0 %></td>
 						<td width=10%><% @actual_hours = 0 %>
 							     <% @log = Log.find(:all, :conditions => {:task_id => taskmain.id}) %>
@@ -70,12 +95,10 @@ text-align :center;
 						
 							<td width=30%>
 								<%= text_field_tag "spent_hours[#{t}][:spent_hours]"%>
-								<% reported_date = @date %>
-								<%= hidden_field_tag 'reported_date' , :value=> reported_date %>
+								<%= hidden_field_tag 'log_date' %>
 								<% current_task = taskmain.id %>
 								<%= hidden_field_tag 'task_id' , :value=> current_task %>&nbsp;
 								<%= text_field_tag "spent_hours[#{t}][:description]" %>
-								
 							</td>
 		                                        
 						
